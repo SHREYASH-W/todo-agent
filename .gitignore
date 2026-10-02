@@ -112,3 +112,28 @@ sortedcontainers/
 sortedcontainers-*.dist-info/
 _hypothesis_*.py
 bin/
+
+# Kiro IDE spec/config (internal use only)
+.kiro/
+
+# Unrelated automation scripts
+scripts/auto_*.ps1
+scripts/cleanup_*.bat
+scripts/cleanup_*.ps1
+scripts/test_ai_coding.py
+
+# Unrelated examples
+examples/
+
+# Test utility scripts (not pytest)
+tests/unit/verify_schema.py
+
+# Old unrelated docs (keep locally if needed, don't track)
+docs/AUTOMATION_GUIDE.md
+docs/DATABASE_MANAGER.md
+docs/GETTING_STARTED_GUIDE.md
+docs/HOW_TO_USE.md
+docs/MODELS_SUMMARY.md
+docs/QUICK_AUTOMATION_REFERENCE.md
+docs/SETUP_COMPLETE.md
+docs/START_HERE.md
