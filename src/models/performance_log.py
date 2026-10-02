@@ -15,6 +15,11 @@ class PerformanceLog(Base):
     metric_name = Column(String(100), nullable=False, index=True)
     metric_value = Column(Float, nullable=False)
     timestamp = Column(DateTime, nullable=False, default=datetime.utcnow, index=True)
+
+    def __init__(self, **kwargs):
+        if "timestamp" not in kwargs:
+            kwargs["timestamp"] = datetime.utcnow()
+        super().__init__(**kwargs)
     
     def __repr__(self):
         return f"<PerformanceLog(id={self.id}, metric='{self.metric_name}', value={self.metric_value}, timestamp={self.timestamp})>"

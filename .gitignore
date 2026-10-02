@@ -104,3 +104,11 @@ dmypy.json
 
 # pytype static type analyzer
 .pytype/
+
+# Hypothesis installed locally (install via pip instead)
+hypothesis/
+hypothesis-*.dist-info/
+sortedcontainers/
+sortedcontainers-*.dist-info/
+_hypothesis_*.py
+bin/

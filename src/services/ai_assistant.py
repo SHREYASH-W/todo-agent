@@ -35,9 +35,18 @@ MAX_RETRIES = 3
 RETRY_DELAYS = [2, 4, 8]  # exponential backoff in seconds
 
 
-class OllamaError(Exception):
+class AIAssistantError(Exception):
+    """Base error for AI Assistant."""
+    pass
+
+
+class OllamaError(AIAssistantError):
     """Raised when Ollama service is unavailable or returns an error."""
     pass
+
+
+# Alias used by callers that expect OllamaUnavailableError
+OllamaUnavailableError = OllamaError
 
 
 class QuestPriority:
@@ -67,11 +76,21 @@ class AIAssistant:
     performance insights.
     """
 
-    def __init__(self, base_url: str = OLLAMA_BASE_URL, model: str = OLLAMA_MODEL):
-        self.base_url = base_url.rstrip("/")
+    def __init__(
+        self,
+        base_url: str = OLLAMA_BASE_URL,
+        model: str = OLLAMA_MODEL,
+        # Accept aliases used by tests
+        ollama_url: Optional[str] = None,
+        timeout: int = OLLAMA_TIMEOUT,
+        max_retries: int = MAX_RETRIES,
+    ):
+        self.base_url = (ollama_url or base_url).rstrip("/")
         self.model = model
+        self.timeout = timeout
+        self.max_retries = max_retries
         self.generate_url = f"{self.base_url}/api/generate"
-        logger.info(f"AIAssistant initialized (model={model}, url={base_url})")
+        logger.info(f"AIAssistant initialized (model={model}, url={self.base_url})")
 
     def _call_ollama(
         self,
@@ -107,9 +126,9 @@ class AIAssistant:
 
         last_error: Optional[Exception] = None
 
-        for attempt in range(MAX_RETRIES):
+        for attempt in range(self.max_retries):
             try:
-                logger.debug(f"Ollama request attempt {attempt + 1}/{MAX_RETRIES}")
+                logger.debug(f"Ollama request attempt {attempt + 1}/{self.max_retries}")
                 response = requests.post(
                     self.generate_url,
                     json=payload,
@@ -134,13 +153,13 @@ class AIAssistant:
                 last_error = e
                 logger.warning(f"Unexpected Ollama error (attempt {attempt + 1}): {e}")
 
-            if attempt < MAX_RETRIES - 1:
-                delay = RETRY_DELAYS[attempt]
+            if attempt < self.max_retries - 1:
+                delay = RETRY_DELAYS[min(attempt, len(RETRY_DELAYS) - 1)]
                 logger.info(f"Retrying in {delay}s...")
                 time.sleep(delay)
 
         raise OllamaError(
-            f"Ollama service unavailable after {MAX_RETRIES} attempts. "
+            f"Ollama service unavailable after {self.max_retries} attempts. "
             f"Last error: {last_error}"
         )
 

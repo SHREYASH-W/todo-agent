@@ -15,7 +15,12 @@ class DatabaseBackup(Base):
     file_path = Column(String(500), nullable=False)
     file_size = Column(Integer, nullable=False)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow, index=True)
-    
+
+    def __init__(self, **kwargs):
+        if "created_at" not in kwargs:
+            kwargs["created_at"] = datetime.utcnow()
+        super().__init__(**kwargs)
+
     def __repr__(self):
         return f"<DatabaseBackup(id={self.id}, file_path='{self.file_path}', size={self.file_size}, created_at={self.created_at})>"
     
