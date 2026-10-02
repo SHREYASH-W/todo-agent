@@ -1,0 +1,31 @@
+# LifeHunter System Dependencies
+
+# Web Framework
+Flask==3.0.0
+# Alternative: FastAPI==0.104.1
+# uvicorn==0.24.0  # Uncomment if using FastAPI
+
+# Database ORM
+SQLAlchemy==2.0.23
+
+# HTTP Client for MCP communication
+requests==2.31.0
+
+# Background Job Scheduling
+APScheduler==3.10.4
+
+# Password Hashing
+bcrypt==4.1.1
+
+# Testing Framework
+pytest==7.4.3
+pytest-cov==4.1.0
+
+# Property-Based Testing
+hypothesis==6.92.1
+
+# Development Tools
+python-dotenv==1.0.0
+
+# Frontend Visualization (included via CDN in templates)
+# Chart.js will be loaded from CDN in HTML templates

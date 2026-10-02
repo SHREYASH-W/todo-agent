@@ -1,0 +1,12 @@
+/* Career Hunter module styles */
+.ch-stats   { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:1rem; }
+.kpi-label  { font-size:.75rem; color:var(--clr-muted); text-transform:uppercase; letter-spacing:.05em; }
+.kpi-value  { font-size:1.8rem; font-weight:700; color:var(--clr-accent); }
+.ch-actions { display:flex; align-items:center; gap:1rem; margin:.5rem 0; }
+.ch-status  { font-size:.85rem; color:var(--clr-muted); }
+.ch-score-filter { margin-left:1rem; vertical-align:middle; cursor:pointer; }
+.ch-select  { background:var(--clr-surface); border:1px solid var(--clr-border); color:var(--clr-text); border-radius:var(--radius); padding:.2rem .5rem; margin-left:.75rem; font-size:.85rem; }
+.ch-modal   { position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:300; }
+.ch-modal__box { background:var(--clr-surface);border:1px solid var(--clr-primary);border-radius:var(--radius);padding:1.5rem;max-width:600px;width:95%;position:relative;max-height:85vh;overflow-y:auto; }
+.ch-textarea { width:100%;background:var(--clr-bg);border:1px solid var(--clr-border);color:var(--clr-text);border-radius:var(--radius);padding:.75rem;font-family:var(--font);font-size:.88rem;resize:vertical; }
+@media(max-width:700px){ .ch-stats{grid-template-columns:1fr 1fr;} }

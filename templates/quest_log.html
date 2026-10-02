@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% set active_page = "quests" %}
+{% block title %}Quest Log – LifeHunter{% endblock %}
+{% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='css/quest_log.css') }}" />{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Quest Log</h1>
+<div id="questApp">
+  <!-- Daily Quests -->
+  <section class="quest-section card" aria-label="Daily quests">
+    <h2 class="quest-section__title">⚡ Daily Quests
+      <span class="quest-section__sub" id="dailyPct">0%</span>
+    </h2>
+    <ul class="quest-list" id="dailyList" role="list"></ul>
+  </section>
+  <!-- Main Quests -->
+  <section class="quest-section card" aria-label="Main quests">
+    <h2 class="quest-section__title">🗺️ Main Quests</h2>
+    <ul class="quest-list" id="mainList" role="list"></ul>
+  </section>
+  <!-- Instant Dungeons -->
+  <section class="quest-section card" aria-label="Instant dungeons">
+    <h2 class="quest-section__title">⏱️ Instant Dungeons</h2>
+    <ul class="quest-list" id="instantList" role="list"></ul>
+  </section>
+  <!-- Emergency Quests -->
+  <section class="quest-section card" aria-label="Emergency quests">
+    <h2 class="quest-section__title">🚨 Emergency Quests</h2>
+    <ul class="quest-list" id="emergencyList" role="list"></ul>
+  </section>
+</div>
+<script>const PLAYER_ID = {{ player_id | default(1) }};</script>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/quest_log.js') }}" defer></script>{% endblock %}

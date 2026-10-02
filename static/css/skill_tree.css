@@ -1,0 +1,19 @@
+/* Skill Tree styles – Requirements 24.1-24.7 */
+.skill-points-badge { font-size: .9rem; font-weight: normal; color: var(--clr-accent); margin-left: .75rem; }
+.skill-tree { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
+.skill-card { width: 160px; border: 1px solid var(--clr-border); border-radius: var(--radius); padding: 1rem; text-align: center; cursor: pointer; transition: border-color .2s, transform .15s; position: relative; }
+.skill-card:hover { border-color: var(--clr-primary); transform: translateY(-2px); }
+.skill-card--locked   { filter: grayscale(1) brightness(.6); }
+.skill-card--unlocked { border-color: var(--clr-primary); }
+.skill-card__icon  { font-size: 1.8rem; margin-bottom: .4rem; }
+.skill-card__name  { font-size: .85rem; font-weight: 600; }
+.skill-card__level { font-size: .75rem; color: var(--clr-muted); margin-top: .2rem; }
+.skill-card__type  { font-size: .65rem; text-transform: uppercase; color: var(--clr-accent); margin-top: .2rem; }
+.skill-card__btn   { margin-top: .6rem; }
+
+.skill-tooltip {
+  position: fixed; z-index: 200; background: var(--clr-surface);
+  border: 1px solid var(--clr-primary); border-radius: var(--radius);
+  padding: .75rem 1rem; max-width: 220px; font-size: .82rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,.5); pointer-events: none;
+}

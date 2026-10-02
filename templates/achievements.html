@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% set active_page = "achievements" %}
+{% block title %}Achievements – LifeHunter{% endblock %}
+{% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='css/achievements.css') }}" />{% endblock %}
+{% block content %}
+<div class="ach-header">
+  <h1 class="page-title">Achievements</h1>
+  <div class="ach-filters" role="group" aria-label="Filter by rarity">
+    <button class="btn btn--ghost ach-filter--active" data-filter="all">All</button>
+    <button class="btn btn--ghost" data-filter="common">Common</button>
+    <button class="btn btn--ghost" data-filter="rare">Rare</button>
+    <button class="btn btn--ghost" data-filter="epic">Epic</button>
+    <button class="btn btn--ghost" data-filter="legendary">Legendary</button>
+  </div>
+  <p class="ach-pct">Completion: <strong id="achPct">0%</strong></p>
+</div>
+<div class="ach-grid" id="achGrid" role="list" aria-label="Achievement gallery"></div>
+<div class="ach-modal" id="achModal" role="dialog" aria-modal="true" aria-labelledby="achModalTitle" hidden>
+  <div class="ach-modal__box">
+    <button class="ach-modal__close" onclick="closeModal()" aria-label="Close">✕</button>
+    <div id="achModalContent"></div>
+  </div>
+</div>
+<script>const PLAYER_ID = {{ player_id | default(1) }};</script>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/achievements.js') }}" defer></script>{% endblock %}

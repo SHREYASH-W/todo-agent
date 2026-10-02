@@ -1,0 +1,24 @@
+/* Quest Log styles – Requirements 23.1-23.7 */
+.page-title { font-size: 1.6rem; font-weight: 700; color: var(--clr-primary); margin-bottom: 1.25rem; }
+#questApp   { display: flex; flex-direction: column; gap: 1rem; }
+
+.quest-section__title { font-size: 1rem; font-weight: 600; margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem; }
+.quest-section__sub   { font-size: .8rem; font-weight: normal; color: var(--clr-accent); }
+.quest-list           { list-style: none; }
+
+.quest-item { padding: .75rem; border-bottom: 1px solid var(--clr-border); cursor: pointer; }
+.quest-item:last-child { border-bottom: none; }
+.quest-item--overdue  { border-left: 3px solid var(--clr-danger); padding-left: .6rem; }
+.quest-item--completed { opacity: .5; }
+
+.quest-item__header  { display: flex; align-items: center; gap: .6rem; }
+.quest-item__title   { flex: 1; font-weight: 600; font-size: .95rem; }
+.quest-item__xp      { font-size: .8rem; color: var(--clr-accent); white-space: nowrap; }
+.quest-item__expand  { font-size: .7rem; color: var(--clr-muted); }
+.quest-item__body    { margin-top: .6rem; font-size: .85rem; color: var(--clr-muted); display: none; }
+.quest-item--open .quest-item__body { display: block; }
+.quest-item__timer   { color: var(--clr-danger); font-weight: 600; font-size: .85rem; }
+.quest-item__progress { margin-top: .5rem; }
+.quest-item__complete { margin-top: .75rem; }
+
+.quest--empty { color: var(--clr-muted); font-size: .85rem; padding: .5rem 0; }

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% set active_page = "skills" %}
+{% block title %}Skill Tree – LifeHunter{% endblock %}
+{% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='css/skill_tree.css') }}" />{% endblock %}
+{% block content %}
+<h1 class="page-title">Skill Tree
+  <span class="skill-points-badge" id="skillPointsBadge">0 points</span>
+</h1>
+<div class="skill-tree" id="skillTree" role="list" aria-label="Skill tree"></div>
+<div class="skill-tooltip" id="skillTooltip" role="tooltip" hidden></div>
+<script>const PLAYER_ID = {{ player_id | default(1) }};</script>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/skill_tree.js') }}" defer></script>{% endblock %}

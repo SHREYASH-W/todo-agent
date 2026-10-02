@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% set active_page = "modules" %}
+{% block title %}Career Hunter – LifeHunter{% endblock %}
+{% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='css/modules/career_hunter.css') }}" />{% endblock %}
+{% block content %}
+<h1 class="page-title">⚔️ Career Hunter Module</h1>
+
+<!-- Stats row -->
+<div class="ch-stats">
+  <div class="card kpi-card"><p class="kpi-label">Applications</p><p class="kpi-value" id="totalApps">—</p></div>
+  <div class="card kpi-card"><p class="kpi-label">Response Rate</p><p class="kpi-value" id="responseRate">—</p></div>
+  <div class="card kpi-card"><p class="kpi-label">Interview Rate</p><p class="kpi-value" id="interviewRate">—</p></div>
+  <div class="card kpi-card"><p class="kpi-label">Offer Rate</p><p class="kpi-value" id="offerRate">—</p></div>
+</div>
+
+<!-- Actions -->
+<div class="ch-actions">
+  <button class="btn btn--primary" id="scrapeBtn" onclick="triggerScrape()">🔍 Scrape Jobs</button>
+  <span id="scrapeStatus" class="ch-status"></span>
+</div>
+
+<!-- Matched Jobs -->
+<section class="card" style="margin-top:1rem">
+  <h2 class="card__title">Top Matched Jobs
+    <input class="ch-score-filter" type="range" id="scoreFilter" min="0" max="100" value="0" oninput="filterJobs(this.value)" aria-label="Minimum match score" />
+    <span id="scoreLabel">Min score: 0</span>
+  </h2>
+  <div class="table-wrap"><table id="jobsTable">
+    <thead><tr><th>Title</th><th>Company</th><th>Location</th><th>Match</th><th>Action</th></tr></thead>
+    <tbody id="jobsTbody"></tbody>
+  </table></div>
+</section>
+
+<!-- Applications -->
+<section class="card" style="margin-top:1rem">
+  <h2 class="card__title">Application History
+    <select id="statusFilter" onchange="filterApps(this.value)" class="ch-select" aria-label="Filter by status">
+      <option value="">All</option>
+      <option>submitted</option><option>under_review</option>
+      <option>interview</option><option>offered</option><option>rejected</option>
+    </select>
+  </h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Company</th><th>Title</th><th>Status</th><th>Submitted</th><th>Action</th></tr></thead>
+    <tbody id="appsTbody"></tbody>
+  </table></div>
+</section>
+
+<!-- Cover Letter Modal -->
+<div class="ch-modal" id="clModal" hidden role="dialog" aria-modal="true" aria-labelledby="clModalTitle">
+  <div class="ch-modal__box">
+    <button class="ach-modal__close" onclick="closeCL()" aria-label="Close">✕</button>
+    <h2 id="clModalTitle" style="color:var(--clr-primary);margin-bottom:.75rem">Generated Cover Letter</h2>
+    <textarea id="clText" class="ch-textarea" rows="14" aria-label="Cover letter text"></textarea>
+    <div style="margin-top:.75rem;display:flex;gap:.5rem">
+      <button class="btn btn--primary" onclick="submitApplication()">✓ Submit Application</button>
+      <button class="btn btn--ghost" onclick="closeCL()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>const PLAYER_ID = {{ player_id | default(1) }};</script>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/modules/career_hunter.js') }}" defer></script>{% endblock %}

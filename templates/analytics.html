@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% set active_page = "analytics" %}
+{% block title %}Analytics – LifeHunter{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/analytics.css') }}" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+{% endblock %}
+{% block content %}
+<div class="analytics-header">
+  <h1 class="page-title">Progress Analytics</h1>
+  <div class="analytics-range" role="group" aria-label="Time range">
+    <button class="btn btn--ghost range-btn range-btn--active" data-days="7">7 Days</button>
+    <button class="btn btn--ghost range-btn" data-days="30">30 Days</button>
+    <button class="btn btn--ghost range-btn" data-days="90">90 Days</button>
+    <button class="btn btn--ghost range-btn" data-days="0">All Time</button>
+  </div>
+</div>
+<!-- KPIs -->
+<div class="kpi-grid">
+  <div class="card kpi-card"><p class="kpi-label">Daily Quest Streak</p><p class="kpi-value" id="kpiStreak">—</p></div>
+  <div class="card kpi-card"><p class="kpi-label">Total Quests Completed</p><p class="kpi-value" id="kpiTotal">—</p></div>
+  <div class="card kpi-card"><p class="kpi-label">Avg XP / Day</p><p class="kpi-value" id="kpiXpDay">—</p></div>
+</div>
+<!-- Charts -->
+<div class="chart-grid">
+  <div class="card chart-card"><h2 class="card__title">XP Over Time</h2><canvas id="xpChart" role="img" aria-label="XP over time line chart"></canvas></div>
+  <div class="card chart-card"><h2 class="card__title">Quest Completion by Type</h2><canvas id="questChart" role="img" aria-label="Quest completion bar chart"></canvas></div>
+  <div class="card chart-card chart-card--wide"><h2 class="card__title">Stat Distribution</h2><canvas id="statChart" role="img" aria-label="Stat distribution radar chart"></canvas></div>
+</div>
+<script>const PLAYER_ID = {{ player_id | default(1) }};</script>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/analytics.js') }}" defer></script>{% endblock %}

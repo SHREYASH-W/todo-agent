@@ -1,0 +1,24 @@
+/* Achievement Gallery – Requirements 25.1-25.7 */
+.ach-header  { display:flex; flex-wrap:wrap; align-items:center; gap:1rem; margin-bottom:1.25rem; }
+.ach-filters { display:flex; flex-wrap:wrap; gap:.4rem; }
+.ach-filter--active { border-color:var(--clr-primary)!important; color:var(--clr-primary)!important; }
+.ach-pct     { color:var(--clr-muted); font-size:.9rem; margin-left:auto; }
+
+.ach-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:1rem; }
+
+.ach-card { background:var(--clr-surface); border:1px solid var(--clr-border); border-radius:var(--radius); padding:1rem; text-align:center; cursor:pointer; transition:border-color .2s,transform .15s; }
+.ach-card:hover { border-color:var(--clr-primary); transform:translateY(-2px); }
+.ach-card--locked { filter:grayscale(1) brightness(.55); }
+.ach-card--common    { border-top:3px solid #a0a0c0; }
+.ach-card--rare      { border-top:3px solid #4488ff; }
+.ach-card--epic      { border-top:3px solid #a044ff; }
+.ach-card--legendary { border-top:3px solid var(--clr-gold); box-shadow:0 0 12px rgba(255,215,0,.25); }
+
+.ach-card__icon   { font-size:2rem; margin-bottom:.4rem; }
+.ach-card__name   { font-size:.82rem; font-weight:600; }
+.ach-card__rarity { font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; margin-top:.2rem; }
+.ach-card__date   { font-size:.7rem; color:var(--clr-muted); margin-top:.2rem; }
+
+.ach-modal { position:fixed; inset:0; background:rgba(0,0,0,.7); display:flex; align-items:center; justify-content:center; z-index:300; }
+.ach-modal__box { background:var(--clr-surface); border:1px solid var(--clr-primary); border-radius:var(--radius); padding:1.5rem; max-width:360px; width:90%; position:relative; }
+.ach-modal__close { position:absolute; top:.6rem; right:.75rem; background:none; border:none; color:var(--clr-muted); cursor:pointer; font-size:1.1rem; }

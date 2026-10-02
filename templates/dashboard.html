@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% set active_page = "dashboard" %}
+{% block title %}Dashboard – LifeHunter{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="dash">
+  <!-- ── Player Header ─────────────────────────── -->
+  <section class="dash__header card" aria-label="Player profile">
+    <div class="dash__identity">
+      <div class="dash__avatar" aria-hidden="true">⚔️</div>
+      <div>
+        <h1 class="dash__name" id="playerName">Loading…</h1>
+        <p class="dash__title-badge" id="playerTitle"></p>
+        <p class="dash__rank rank--E" id="playerRank">E-Rank</p>
+      </div>
+    </div>
+    <div class="dash__currency">
+      <span class="dash__gold" id="playerGold">🪙 0</span>
+    </div>
+  </section>
+
+  <!-- ── XP Bar ────────────────────────────────── -->
+  <section class="dash__xp card" aria-label="Experience points">
+    <div class="dash__xp-label">
+      <span>Level <strong id="playerLevel">1</strong></span>
+      <span id="xpText">0 / 100 XP</span>
+    </div>
+    <div class="progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="xpBar">
+      <div class="progress__fill progress__fill--xp" id="xpFill" style="width:0%"></div>
+    </div>
+  </section>
+
+  <!-- ── HP / MP ───────────────────────────────── -->
+  <section class="dash__vitals" aria-label="Vitals">
+    <div class="card">
+      <p class="card__title">HP</p>
+      <div class="progress" role="progressbar" aria-label="HP">
+        <div class="progress__fill progress__fill--hp" id="hpFill" style="width:100%"></div>
+      </div>
+      <p id="hpText" class="dash__vital-text">200 / 200</p>
+    </div>
+    <div class="card">
+      <p class="card__title">MP</p>
+      <div class="progress" role="progressbar" aria-label="MP">
+        <div class="progress__fill progress__fill--mp" id="mpFill" style="width:100%"></div>
+      </div>
+      <p id="mpText" class="dash__vital-text">100 / 100</p>
+    </div>
+  </section>
+
+  <!-- ── Stats ─────────────────────────────────── -->
+  <section class="card" aria-label="Character stats">
+    <h2 class="card__title">Stats
+      <span class="dash__points-badge" id="statPointsBadge">0 points available</span>
+    </h2>
+    <div class="stat-grid" id="statsGrid">
+      <div class="stat-item"><p class="stat-item__label">STR</p><p class="stat-item__value" id="stat-str">10</p></div>
+      <div class="stat-item"><p class="stat-item__label">INT</p><p class="stat-item__value" id="stat-int">10</p></div>
+      <div class="stat-item"><p class="stat-item__label">AGI</p><p class="stat-item__value" id="stat-agi">10</p></div>
+      <div class="stat-item"><p class="stat-item__label">VIT</p><p class="stat-item__value" id="stat-vit">10</p></div>
+      <div class="stat-item"><p class="stat-item__label">SEN</p><p class="stat-item__value" id="stat-sen">10</p></div>
+      <div class="stat-item"><p class="stat-item__label">LUK</p><p class="stat-item__value" id="stat-luk">10</p></div>
+    </div>
+    <div class="dash__stat-alloc" id="statAllocPanel" hidden>
+      <p>Allocate stat point to:</p>
+      <div class="dash__stat-btns">
+        <button class="btn btn--primary" onclick="allocateStat('str_stat')">STR</button>
+        <button class="btn btn--primary" onclick="allocateStat('int_stat')">INT</button>
+        <button class="btn btn--primary" onclick="allocateStat('agi_stat')">AGI</button>
+        <button class="btn btn--primary" onclick="allocateStat('vit_stat')">VIT</button>
+        <button class="btn btn--primary" onclick="allocateStat('sen_stat')">SEN</button>
+        <button class="btn btn--primary" onclick="allocateStat('luk_stat')">LUK</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Active Quests Summary ─────────────────── -->
+  <section class="card" aria-label="Active quests">
+    <h2 class="card__title">Today's Quests
+      <a href="/quests" class="btn btn--ghost" style="float:right;font-size:.8rem">View All</a>
+    </h2>
+    <ul id="dailyQuestList" class="dash__quest-list"></ul>
+  </section>
+</div>
+
+<script>const PLAYER_ID = {{ player_id | default(1) }};</script>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}" defer></script>
+{% endblock %}

@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  lifehunter:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ../database.db:/app/database.db
+      - ../config:/app/config
+      - ../logs:/app/logs
+      - ../backups:/app/backups
+    environment:
+      - LH_DATABASE_PATH=/app/database.db
+      - LH_OLLAMA_HOST=http://ollama:11434
+      - LH_LOG_LEVEL=INFO
+    depends_on:
+      - ollama
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+
+volumes:
+  ollama_data:

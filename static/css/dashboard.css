@@ -1,0 +1,32 @@
+/* Dashboard styles – Requirements 22.1-22.7 */
+.dash { display: grid; gap: 1rem; grid-template-columns: 1fr 1fr; }
+.dash__header { grid-column: 1/-1; display: flex; justify-content: space-between; align-items: center; }
+.dash__xp     { grid-column: 1/-1; }
+.dash__vitals { grid-column: 1/-1; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+.dash__identity { display: flex; gap: 1rem; align-items: center; }
+.dash__avatar   { font-size: 3rem; }
+.dash__name     { font-size: 1.5rem; font-weight: 700; }
+.dash__title-badge { color: var(--clr-gold); font-size: .85rem; }
+.dash__rank     { font-weight: 700; font-size: 1rem; margin-top: .2rem; }
+.dash__gold     { font-size: 1.2rem; font-weight: 700; color: var(--clr-gold); }
+
+.dash__xp-label { display: flex; justify-content: space-between; margin-bottom: .4rem; font-size: .85rem; color: var(--clr-muted); }
+.dash__vital-text { font-size: .8rem; color: var(--clr-muted); margin-top: .3rem; }
+
+.dash__points-badge { font-size: .75rem; font-weight: normal; color: var(--clr-accent); margin-left: .5rem; }
+.dash__stat-alloc   { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--clr-border); }
+.dash__stat-btns    { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .5rem; }
+
+.dash__quest-list   { list-style: none; }
+.dash__quest-item   { display: flex; align-items: center; gap: .75rem; padding: .6rem 0; border-bottom: 1px solid var(--clr-border); }
+.dash__quest-item:last-child { border-bottom: none; }
+.dash__quest-check  { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--clr-primary); cursor: pointer; flex-shrink: 0; }
+.dash__quest-check--done { background: var(--clr-primary); }
+.dash__quest-name   { flex: 1; font-size: .9rem; }
+.dash__quest-xp     { font-size: .8rem; color: var(--clr-accent); white-space: nowrap; }
+
+@media (max-width: 600px) {
+  .dash { grid-template-columns: 1fr; }
+  .dash__vitals { grid-template-columns: 1fr; }
+}

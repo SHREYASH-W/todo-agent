@@ -1,0 +1,11 @@
+/* Analytics – Requirements 27.1-27.7 */
+.analytics-header { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.25rem; }
+.analytics-range  { display:flex; gap:.4rem; }
+.range-btn--active { border-color:var(--clr-primary)!important; color:var(--clr-primary)!important; }
+.kpi-grid  { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:1rem; }
+.kpi-card  { text-align:center; }
+.kpi-label { font-size:.75rem; color:var(--clr-muted); text-transform:uppercase; letter-spacing:.05em; }
+.kpi-value { font-size:2rem; font-weight:700; color:var(--clr-accent); margin-top:.2rem; }
+.chart-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.chart-card--wide { grid-column:1/-1; }
+@media(max-width:600px){ .kpi-grid{grid-template-columns:1fr 1fr;} .chart-grid{grid-template-columns:1fr;} }
