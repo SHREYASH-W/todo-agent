@@ -2,13 +2,15 @@
 {% set active_page = "modules" %}
 {% block title %}Habit Forge – LifeHunter{% endblock %}
 {% block content %}
-<h1 class="page-title">🔥 Habit Forge Module</h1>
-<div class="card" style="text-align:center;padding:3rem">
-  <div style="font-size:4rem">🔥</div>
-  <h2 style="color:var(--clr-primary);margin:.75rem 0">Habit Forge</h2>
-  <p style="color:var(--clr-muted);max-width:400px;margin:0 auto">
-    Build powerful daily routines and track habit streaks.<br/>
-    <strong style="color:var(--clr-accent)">Unlocks at S-Rank (Level 80)</strong>
-  </p>
+<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem">
+  <a href="/modules" class="btn btn--ghost btn--sm">← Modules</a>
+  <h1 class="page-title" style="margin-bottom:0">🔥 Habit Forge</h1>
 </div>
+<div class="card" style="text-align:center;padding:3rem">
+  <div style="font-size:3rem;margin-bottom:1rem">🔥</div>
+  <h2 style="margin-bottom:.5rem">Habit Forge — Coming Soon</h2>
+  <p style="color:var(--muted);max-width:400px;margin:0 auto">Build powerful daily habits, track streaks, unlock special bonuses for consistency, and forge your ideal routine.</p>
+  <div style="margin-top:1.5rem"><span class="badge badge--legendary">S-Rank Module</span></div>
+</div>
+<script>const PLAYER_ID = {{ player_id | default(1) }};</script>
 {% endblock %}

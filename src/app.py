@@ -73,7 +73,7 @@ def create_app() -> Flask:
 
     @app.route("/modules")
     def modules():
-        return render_template("modules/career_hunter.html", player_id=1)
+        return render_template("modules.html", player_id=1)
 
     @app.route("/modules/<module_name>")
     def module_page(module_name):

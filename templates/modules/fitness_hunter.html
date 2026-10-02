@@ -2,13 +2,15 @@
 {% set active_page = "modules" %}
 {% block title %}Fitness Hunter – LifeHunter{% endblock %}
 {% block content %}
-<h1 class="page-title">💪 Fitness Hunter Module</h1>
-<div class="card" style="text-align:center;padding:3rem">
-  <div style="font-size:4rem">💪</div>
-  <h2 style="color:var(--clr-primary);margin:.75rem 0">Fitness Hunter</h2>
-  <p style="color:var(--clr-muted);max-width:400px;margin:0 auto">
-    Log workouts, track fitness goals, and build physical strength.<br/>
-    <strong style="color:var(--clr-accent)">Unlocks at C-Rank (Level 25)</strong>
-  </p>
+<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem">
+  <a href="/modules" class="btn btn--ghost btn--sm">← Modules</a>
+  <h1 class="page-title" style="margin-bottom:0">💪 Fitness Hunter</h1>
 </div>
+<div class="card" style="text-align:center;padding:3rem">
+  <div style="font-size:3rem;margin-bottom:1rem">💪</div>
+  <h2 style="margin-bottom:.5rem">Fitness Hunter — Coming Soon</h2>
+  <p style="color:var(--muted);max-width:400px;margin:0 auto">Log workouts, track fitness goals, compete in challenges, and earn bonus XP for physical activity streaks.</p>
+  <div style="margin-top:1.5rem"><span class="badge badge--epic">C-Rank Module</span></div>
+</div>
+<script>const PLAYER_ID = {{ player_id | default(1) }};</script>
 {% endblock %}

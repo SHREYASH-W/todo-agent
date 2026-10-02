@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% set active_page = "modules" %}
+{% block title %}Modules – LifeHunter{% endblock %}
+{% block head %}
+<style>
+.mods-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1rem; margin-top:1.25rem; }
+.mod-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius); padding:1.4rem;
+  display:flex; flex-direction:column; gap:.75rem;
+  transition:border-color var(--transition), transform var(--transition);
+}
+.mod-card--unlocked { cursor:pointer; }
+.mod-card--unlocked:hover { border-color:var(--primary); transform:translateY(-2px); }
+.mod-card--locked { opacity:.5; filter:grayscale(.4); }
+.mod-card__top  { display:flex; align-items:center; gap:.85rem; }
+.mod-card__icon { font-size:2.4rem; line-height:1; }
+.mod-card__info { flex:1; }
+.mod-card__name { font-size:1.05rem; font-weight:700; margin-bottom:.15rem; }
+.mod-card__req  { font-size:.78rem; color:var(--muted); }
+.mod-card__desc { font-size:.86rem; color:var(--muted); line-height:1.5; }
+.mod-card__unlock-msg { font-size:.82rem; color:var(--warn); font-weight:600; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem">
+  <h1 class="page-title" style="margin-bottom:0">🗂️ Modules</h1>
+  <div id="rankBadge" style="font-size:.9rem;color:var(--muted)">Loading rank…</div>
+</div>
+
+<p style="color:var(--muted);font-size:.88rem;margin-top:.25rem;margin-bottom:.5rem">
+  Unlock powerful life management modules as you advance in rank.
+</p>
+
+<div class="mods-grid" id="modsGrid">
+  <div class="loading-text" style="grid-column:1/-1"><div class="spinner"></div></div>
+</div>
+
+<script>const PLAYER_ID = {{ player_id | default(1) }};</script>
+<script>
+const MOD_INFO = {
+  career_hunter:  { icon:'💼', desc:'Scrape jobs, match with your skills, generate AI cover letters, and track applications.' },
+  skill_trainer:  { icon:'📚', desc:'Track online courses, set learning goals, and earn XP for skill development.' },
+  fitness_hunter: { icon:'💪', desc:'Log workouts, track fitness goals, and maintain healthy streaks.' },
+  finance_manager:{ icon:'💰', desc:'Budget tracking, expense logs, and financial milestones.' },
+  social_network: { icon:'🤝', desc:'Track professional connections, networking goals, and relationships.' },
+  habit_forge:    { icon:'🔥', desc:'Build and track powerful daily habits with streak bonuses.' },
+};
+const RANK_REQ = { career_hunter:'E', skill_trainer:'D', fitness_hunter:'C', finance_manager:'B', social_network:'A', habit_forge:'S' };
+
+async function loadModules() {
+  const grid = document.getElementById('modsGrid');
+  try {
+    const data = await (await fetch(`/api/modules?player_id=${PLAYER_ID}`)).json();
+    const modules = data.modules || [];
+    const rank    = data.player_rank || 'E';
+
+    const rankBadge = document.getElementById('rankBadge');
+    if (rankBadge) rankBadge.innerHTML = `Your rank: <strong class="rank--${rank}" style="font-size:1rem">${rank}-Rank</strong>`;
+
+    if (!modules.length) {
+      grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-state__text">No modules found</div></div>';
+      return;
+    }
+
+    grid.innerHTML = modules.map(m => {
+      const info = MOD_INFO[m.name] || { icon:'📦', desc:'Module coming soon.' };
+      return `
+        <div class="mod-card ${m.unlocked ? 'mod-card--unlocked' : 'mod-card--locked'}"
+             onclick="${m.unlocked ? `window.location='/modules/${m.name}'` : 'void 0'}"
+             role="${m.unlocked ? 'button' : 'article'}"
+             tabindex="${m.unlocked ? 0 : -1}"
+             aria-label="${m.display_name}"
+             onkeydown="if(event.key==='Enter'&&${m.unlocked})window.location='/modules/${m.name}'">
+          <div class="mod-card__top">
+            <span class="mod-card__icon">${info.icon}</span>
+            <div class="mod-card__info">
+              <div class="mod-card__name">${m.display_name}</div>
+              <div class="mod-card__req">Requires ${m.required_rank}-Rank</div>
+            </div>
+            ${m.unlocked
+              ? '<span style="color:var(--success);font-size:1.1rem">✅</span>'
+              : '<span style="font-size:1.1rem">🔒</span>'}
+          </div>
+          <p class="mod-card__desc">${info.desc}</p>
+          ${m.unlocked
+            ? `<a href="/modules/${m.name}" class="btn btn--primary btn--sm">Open Module →</a>`
+            : `<span class="mod-card__unlock-msg">Reach ${m.required_rank}-Rank to unlock</span>`}
+        </div>`;
+    }).join('');
+  } catch(e) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state__text">⚠️ Failed to load modules</div></div>`;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadModules);
+</script>
+{% endblock %}

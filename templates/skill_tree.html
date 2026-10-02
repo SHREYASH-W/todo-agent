@@ -1,13 +1,34 @@
 {% extends "base.html" %}
 {% set active_page = "skills" %}
-{% block title %}Skill Tree – LifeHunter{% endblock %}
+{% block title %}Skills – LifeHunter{% endblock %}
 {% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='css/skill_tree.css') }}" />{% endblock %}
+
 {% block content %}
-<h1 class="page-title">Skill Tree
-  <span class="skill-points-badge" id="skillPointsBadge">0 points</span>
-</h1>
-<div class="skill-tree" id="skillTree" role="list" aria-label="Skill tree"></div>
-<div class="skill-tooltip" id="skillTooltip" role="tooltip" hidden></div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:.75rem">
+  <h1 class="page-title" style="margin-bottom:0">⚡ Skill Tree</h1>
+  <div style="display:flex;gap:.75rem;align-items:center">
+    <span class="skill-pts-badge" id="skillPtsBadge">0 skill points</span>
+    <select class="input" id="filterType" onchange="filterSkills()" style="width:auto">
+      <option value="all">All Skills</option>
+      <option value="passive">Passive</option>
+      <option value="active">Active</option>
+    </select>
+  </div>
+</div>
+
+<div id="skillGrid" class="skill-grid" role="list"></div>
+
+<!-- Tooltip -->
+<div class="skill-tooltip" id="skillTooltip" hidden role="tooltip"></div>
+
+<!-- Skill Detail Modal -->
+<div class="modal-overlay" id="skillModal" hidden>
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeSkillModal()">✕</button>
+    <div id="skillModalContent"></div>
+  </div>
+</div>
+
 <script>const PLAYER_ID = {{ player_id | default(1) }};</script>
 {% endblock %}
 {% block scripts %}<script src="{{ url_for('static', filename='js/skill_tree.js') }}" defer></script>{% endblock %}

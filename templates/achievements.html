@@ -2,25 +2,42 @@
 {% set active_page = "achievements" %}
 {% block title %}Achievements – LifeHunter{% endblock %}
 {% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='css/achievements.css') }}" />{% endblock %}
+
 {% block content %}
 <div class="ach-header">
-  <h1 class="page-title">Achievements</h1>
-  <div class="ach-filters" role="group" aria-label="Filter by rarity">
-    <button class="btn btn--ghost ach-filter--active" data-filter="all">All</button>
-    <button class="btn btn--ghost" data-filter="common">Common</button>
-    <button class="btn btn--ghost" data-filter="rare">Rare</button>
-    <button class="btn btn--ghost" data-filter="epic">Epic</button>
-    <button class="btn btn--ghost" data-filter="legendary">Legendary</button>
+  <h1 class="page-title" style="margin-bottom:0">🏆 Achievements</h1>
+  <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+    <div class="ach-progress-wrap">
+      <div class="progress" style="width:140px">
+        <div class="progress__fill progress__fill--gold" id="achProgressBar" style="width:0%"></div>
+      </div>
+    </div>
+    <span class="ach-pct-badge" id="achPct">0%</span>
   </div>
-  <p class="ach-pct">Completion: <strong id="achPct">0%</strong></p>
 </div>
+
+<!-- Filter row -->
+<div class="ach-filters" role="group" aria-label="Filter by rarity">
+  <button class="btn btn--primary btn--sm ach-filter--active" data-filter="all">All</button>
+  <button class="btn btn--ghost btn--sm" data-filter="common">🔵 Common</button>
+  <button class="btn btn--ghost btn--sm" data-filter="rare">💎 Rare</button>
+  <button class="btn btn--ghost btn--sm" data-filter="epic">💜 Epic</button>
+  <button class="btn btn--ghost btn--sm" data-filter="legendary">⭐ Legendary</button>
+  <button class="btn btn--ghost btn--sm" data-filter="unlocked">✅ Unlocked</button>
+</div>
+
+<div id="achStats" class="ach-stats-row"></div>
+
 <div class="ach-grid" id="achGrid" role="list" aria-label="Achievement gallery"></div>
-<div class="ach-modal" id="achModal" role="dialog" aria-modal="true" aria-labelledby="achModalTitle" hidden>
-  <div class="ach-modal__box">
-    <button class="ach-modal__close" onclick="closeModal()" aria-label="Close">✕</button>
+
+<!-- Achievement Modal -->
+<div class="modal-overlay" id="achModal" role="dialog" aria-modal="true" hidden>
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeAchModal()" aria-label="Close">✕</button>
     <div id="achModalContent"></div>
   </div>
 </div>
+
 <script>const PLAYER_ID = {{ player_id | default(1) }};</script>
 {% endblock %}
 {% block scripts %}<script src="{{ url_for('static', filename='js/achievements.js') }}" defer></script>{% endblock %}

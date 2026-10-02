@@ -1,61 +1,130 @@
 {% extends "base.html" %}
 {% set active_page = "modules" %}
 {% block title %}Career Hunter – LifeHunter{% endblock %}
-{% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='css/modules/career_hunter.css') }}" />{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modules/career_hunter.css') }}" />
+{% endblock %}
+
 {% block content %}
-<h1 class="page-title">⚔️ Career Hunter Module</h1>
+<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;flex-wrap:wrap">
+  <a href="/modules" class="btn btn--ghost btn--sm">← Modules</a>
+  <h1 class="page-title" style="margin-bottom:0">💼 Career Hunter</h1>
+</div>
 
-<!-- Stats row -->
+<!-- Stats -->
 <div class="ch-stats">
-  <div class="card kpi-card"><p class="kpi-label">Applications</p><p class="kpi-value" id="totalApps">—</p></div>
-  <div class="card kpi-card"><p class="kpi-label">Response Rate</p><p class="kpi-value" id="responseRate">—</p></div>
-  <div class="card kpi-card"><p class="kpi-label">Interview Rate</p><p class="kpi-value" id="interviewRate">—</p></div>
-  <div class="card kpi-card"><p class="kpi-label">Offer Rate</p><p class="kpi-value" id="offerRate">—</p></div>
+  <div class="card kpi-card"><p class="kpi-label">📨 Applications</p><p class="kpi-value" id="statApps">—</p></div>
+  <div class="card kpi-card"><p class="kpi-label">📬 Response Rate</p><p class="kpi-value" id="statResp">—</p></div>
+  <div class="card kpi-card"><p class="kpi-label">🤝 Interview Rate</p><p class="kpi-value" id="statIntv">—</p></div>
+  <div class="card kpi-card"><p class="kpi-label">🎉 Offer Rate</p><p class="kpi-value" id="statOffer">—</p></div>
 </div>
 
-<!-- Actions -->
-<div class="ch-actions">
-  <button class="btn btn--primary" id="scrapeBtn" onclick="triggerScrape()">🔍 Scrape Jobs</button>
-  <span id="scrapeStatus" class="ch-status"></span>
+<!-- Scrape controls -->
+<div class="card ch-scrape-card">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem">
+    <div>
+      <h2 class="card__title" style="margin-bottom:.25rem">🔍 Job Search</h2>
+      <p style="color:var(--muted);font-size:.85rem">Find matching jobs from LinkedIn and Indeed</p>
+    </div>
+    <div style="display:flex;gap:.65rem;flex-wrap:wrap;align-items:center">
+      <input class="input" id="scrapeKeywords" placeholder="e.g. Python Developer" style="width:220px" value="Python Developer" />
+      <input class="input" id="scrapeLocation" placeholder="Location (optional)" style="width:160px" />
+      <button class="btn btn--primary" id="scrapeBtn" onclick="triggerScrape()">🔍 Find Jobs</button>
+    </div>
+  </div>
+  <div id="scrapeStatus" style="margin-top:.75rem;font-size:.85rem;color:var(--muted);min-height:1.4em"></div>
 </div>
 
-<!-- Matched Jobs -->
-<section class="card" style="margin-top:1rem">
-  <h2 class="card__title">Top Matched Jobs
-    <input class="ch-score-filter" type="range" id="scoreFilter" min="0" max="100" value="0" oninput="filterJobs(this.value)" aria-label="Minimum match score" />
-    <span id="scoreLabel">Min score: 0</span>
-  </h2>
-  <div class="table-wrap"><table id="jobsTable">
-    <thead><tr><th>Title</th><th>Company</th><th>Location</th><th>Match</th><th>Action</th></tr></thead>
-    <tbody id="jobsTbody"></tbody>
-  </table></div>
-</section>
+<!-- Job matches -->
+<div class="card" style="margin-top:1rem">
+  <div class="card__title">
+    Matched Jobs
+    <div style="display:flex;align-items:center;gap:.75rem">
+      <label style="font-size:.8rem;color:var(--muted);font-weight:normal">
+        Min score: <span id="scoreVal">0</span>%
+        <input type="range" id="scoreFilter" min="0" max="100" value="0"
+               oninput="document.getElementById('scoreVal').textContent=this.value;renderJobs()"
+               style="width:80px;vertical-align:middle;margin-left:.35rem" />
+      </label>
+      <span id="jobCount" style="font-size:.8rem;color:var(--muted)"></span>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table id="jobsTable">
+      <thead><tr><th>Title</th><th>Company</th><th>Location</th><th>Match</th><th style="width:130px">Action</th></tr></thead>
+      <tbody id="jobsTbody"><tr><td colspan="5" class="loading-text"><div class="spinner" style="margin:1rem auto"></div></td></tr></tbody>
+    </table>
+  </div>
+</div>
 
 <!-- Applications -->
-<section class="card" style="margin-top:1rem">
-  <h2 class="card__title">Application History
-    <select id="statusFilter" onchange="filterApps(this.value)" class="ch-select" aria-label="Filter by status">
-      <option value="">All</option>
-      <option>submitted</option><option>under_review</option>
-      <option>interview</option><option>offered</option><option>rejected</option>
+<div class="card" style="margin-top:1rem">
+  <div class="card__title">
+    Application History
+    <select class="input" id="appStatusFilter" onchange="loadApplications()" style="width:auto;font-weight:normal;font-size:.85rem">
+      <option value="">All statuses</option>
+      <option>submitted</option>
+      <option>under_review</option>
+      <option>interview_scheduled</option>
+      <option>offered</option>
+      <option>rejected</option>
     </select>
-  </h2>
-  <div class="table-wrap"><table>
-    <thead><tr><th>Company</th><th>Title</th><th>Status</th><th>Submitted</th><th>Action</th></tr></thead>
-    <tbody id="appsTbody"></tbody>
-  </table></div>
-</section>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Company</th><th>Role</th><th>Status</th><th>Applied</th><th style="width:130px">Action</th></tr></thead>
+      <tbody id="appsTbody"><tr><td colspan="5" class="loading-text"><div class="spinner" style="margin:1rem auto"></div></td></tr></tbody>
+    </table>
+  </div>
+</div>
 
-<!-- Cover Letter Modal -->
-<div class="ch-modal" id="clModal" hidden role="dialog" aria-modal="true" aria-labelledby="clModalTitle">
-  <div class="ch-modal__box">
-    <button class="ach-modal__close" onclick="closeCL()" aria-label="Close">✕</button>
-    <h2 id="clModalTitle" style="color:var(--clr-primary);margin-bottom:.75rem">Generated Cover Letter</h2>
-    <textarea id="clText" class="ch-textarea" rows="14" aria-label="Cover letter text"></textarea>
-    <div style="margin-top:.75rem;display:flex;gap:.5rem">
-      <button class="btn btn--primary" onclick="submitApplication()">✓ Submit Application</button>
-      <button class="btn btn--ghost" onclick="closeCL()">Cancel</button>
+<!-- Cover Letter / Apply Modal -->
+<div class="modal-overlay" id="clModal" hidden role="dialog" aria-modal="true">
+  <div class="modal-box" style="max-width:640px">
+    <button class="modal-close" onclick="closeClModal()">✕</button>
+    <h2 class="modal-title" id="clModalTitle">Apply for Job</h2>
+    <div id="clJobInfo" style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.85rem;margin-bottom:1rem;font-size:.88rem"></div>
+    <div class="form-group">
+      <label class="form-label">Resume / Background <span style="color:var(--muted)">(optional)</span></label>
+      <textarea class="input" id="clResume" rows="3" placeholder="Brief background or paste resume key points…"></textarea>
     </div>
+    <div class="form-group">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.35rem">
+        <label class="form-label" style="margin:0">Cover Letter</label>
+        <button class="btn btn--ghost btn--sm" id="genClBtn" onclick="generateCoverLetter()">✨ Generate with AI</button>
+      </div>
+      <textarea class="input" id="clText" rows="10" placeholder="Write or generate a cover letter…"></textarea>
+    </div>
+    <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+      <button class="btn btn--primary" id="submitAppBtn" onclick="submitApplication()">📨 Submit Application</button>
+      <button class="btn btn--ghost" onclick="closeClModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Update Status Modal -->
+<div class="modal-overlay" id="statusModal" hidden>
+  <div class="modal-box" style="max-width:420px">
+    <button class="modal-close" onclick="closeStatusModal()">✕</button>
+    <h2 class="modal-title">Update Application Status</h2>
+    <div class="form-group">
+      <label class="form-label">New Status</label>
+      <select class="input" id="newStatus">
+        <option value="under_review">Under Review</option>
+        <option value="interview_scheduled">Interview Scheduled</option>
+        <option value="offered">Offered 🎉</option>
+        <option value="rejected">Rejected</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notes</label>
+      <textarea class="input" id="statusNotes" rows="2" placeholder="Optional notes…"></textarea>
+    </div>
+    <div style="display:flex;gap:.75rem">
+      <button class="btn btn--primary" onclick="confirmStatusUpdate()">Update</button>
+      <button class="btn btn--ghost" onclick="closeStatusModal()">Cancel</button>
+    </div>
+    <input type="hidden" id="statusAppId" />
   </div>
 </div>
 

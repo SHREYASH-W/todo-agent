@@ -1,11 +1,34 @@
-/* Analytics – Requirements 27.1-27.7 */
-.analytics-header { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.25rem; }
-.analytics-range  { display:flex; gap:.4rem; }
-.range-btn--active { border-color:var(--clr-primary)!important; color:var(--clr-primary)!important; }
-.kpi-grid  { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:1rem; }
-.kpi-card  { text-align:center; }
-.kpi-label { font-size:.75rem; color:var(--clr-muted); text-transform:uppercase; letter-spacing:.05em; }
-.kpi-value { font-size:2rem; font-weight:700; color:var(--clr-accent); margin-top:.2rem; }
-.chart-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
-.chart-card--wide { grid-column:1/-1; }
-@media(max-width:600px){ .kpi-grid{grid-template-columns:1fr 1fr;} .chart-grid{grid-template-columns:1fr;} }
+/* Analytics */
+.an-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; flex-wrap:wrap; gap:.75rem; }
+.an-range  { display:flex; gap:.35rem; }
+
+/* KPIs */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.kpi-card { text-align:center; padding: 1.25rem 1rem; }
+.kpi-label { font-size:.82rem; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; margin-bottom:.35rem; }
+.kpi-value { font-size:2rem; font-weight:800; color:var(--accent); line-height:1.1; }
+
+/* Charts */
+.chart-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.chart-card--full { grid-column: 1 / -1; }
+
+.chart-wrap { position:relative; height:260px; }
+.chart-wrap--radar { height:320px; }
+
+/* Range buttons */
+.range-btn--active { background: var(--primary) !important; color:#fff !important; border-color:var(--primary) !important; }
+
+@media (max-width: 700px) {
+  .chart-grid { grid-template-columns: 1fr; }
+  .chart-card--full { grid-column: 1; }
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+}

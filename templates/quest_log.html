@@ -4,31 +4,89 @@
 {% block head %}<link rel="stylesheet" href="{{ url_for('static', filename='css/quest_log.css') }}" />{% endblock %}
 
 {% block content %}
-<h1 class="page-title">Quest Log</h1>
-<div id="questApp">
-  <!-- Daily Quests -->
-  <section class="quest-section card" aria-label="Daily quests">
-    <h2 class="quest-section__title">⚡ Daily Quests
-      <span class="quest-section__sub" id="dailyPct">0%</span>
-    </h2>
-    <ul class="quest-list" id="dailyList" role="list"></ul>
-  </section>
-  <!-- Main Quests -->
-  <section class="quest-section card" aria-label="Main quests">
-    <h2 class="quest-section__title">🗺️ Main Quests</h2>
-    <ul class="quest-list" id="mainList" role="list"></ul>
-  </section>
-  <!-- Instant Dungeons -->
-  <section class="quest-section card" aria-label="Instant dungeons">
-    <h2 class="quest-section__title">⏱️ Instant Dungeons</h2>
-    <ul class="quest-list" id="instantList" role="list"></ul>
-  </section>
-  <!-- Emergency Quests -->
-  <section class="quest-section card" aria-label="Emergency quests">
-    <h2 class="quest-section__title">🚨 Emergency Quests</h2>
-    <ul class="quest-list" id="emergencyList" role="list"></ul>
-  </section>
+<div class="ql-header">
+  <h1 class="page-title">📜 Quest Log</h1>
+  <div style="display:flex;gap:.75rem;align-items:center">
+    <button class="btn btn--primary" onclick="openCreateModal('main')">＋ New Quest</button>
+    <button class="btn btn--ghost" onclick="openCreateModal('instant')">⚡ Instant Dungeon</button>
+  </div>
 </div>
+
+<!-- Tabs -->
+<div class="ql-tabs" role="tablist">
+  <button class="ql-tab ql-tab--active" role="tab" data-tab="daily"     onclick="switchTab('daily')">⚡ Daily <span id="dailyCnt" class="tab-cnt"></span></button>
+  <button class="ql-tab" role="tab" data-tab="main"      onclick="switchTab('main')">🗺️ Main <span id="mainCnt" class="tab-cnt"></span></button>
+  <button class="ql-tab" role="tab" data-tab="instant"   onclick="switchTab('instant')">⏱️ Instant <span id="instantCnt" class="tab-cnt"></span></button>
+  <button class="ql-tab" role="tab" data-tab="emergency" onclick="switchTab('emergency')">🚨 Emergency <span id="emergencyCnt" class="tab-cnt"></span></button>
+</div>
+
+<!-- Panels -->
+<div id="panel-daily"     class="ql-panel card">
+  <div class="ql-daily-header">
+    <span>Completion: <strong id="dailyPct">0%</strong></span>
+    <button class="btn btn--ghost btn--sm" onclick="generateDaily()">🎲 Generate Daily</button>
+  </div>
+  <div id="list-daily"><div class="loading-text"><div class="spinner"></div></div></div>
+</div>
+<div id="panel-main"      class="ql-panel card" hidden>
+  <div id="list-main"><div class="loading-text"><div class="spinner"></div></div></div>
+</div>
+<div id="panel-instant"   class="ql-panel card" hidden>
+  <p style="color:var(--muted);font-size:.85rem;margin-bottom:.75rem">Time-limited challenges. Complete before the timer expires!</p>
+  <div id="list-instant"><div class="loading-text"><div class="spinner"></div></div></div>
+</div>
+<div id="panel-emergency" class="ql-panel card" hidden>
+  <p style="color:var(--danger);font-size:.85rem;margin-bottom:.75rem">🚨 Emergency quests give 2× XP but penalise on failure!</p>
+  <div id="list-emergency"><div class="loading-text"><div class="spinner"></div></div></div>
+</div>
+
+<!-- Create Quest Modal -->
+<div class="modal-overlay" id="createModal" hidden>
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeCreateModal()">✕</button>
+    <h2 class="modal-title" id="createModalTitle">New Quest</h2>
+    <form id="createForm" onsubmit="submitCreateQuest(event)">
+      <div class="form-group">
+        <label class="form-label">Title *</label>
+        <input class="input" id="qTitle" placeholder="Quest title" required maxlength="200" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="input" id="qDesc" placeholder="Describe what you need to do…" rows="3"></textarea>
+      </div>
+      <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+        <div>
+          <label class="form-label">XP Reward</label>
+          <input class="input" id="qXp" type="number" min="0" max="10000" value="50" />
+        </div>
+        <div>
+          <label class="form-label">Gold Reward</label>
+          <input class="input" id="qGold" type="number" min="0" max="5000" value="20" />
+        </div>
+      </div>
+      <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+        <div>
+          <label class="form-label">Difficulty</label>
+          <select class="input" id="qDiff">
+            <option value="easy">Easy</option>
+            <option value="medium" selected>Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        </div>
+        <div id="durationGroup" hidden>
+          <label class="form-label">Duration (minutes)</label>
+          <input class="input" id="qDuration" type="number" min="15" max="240" value="60" />
+        </div>
+      </div>
+      <input type="hidden" id="qType" value="main" />
+      <div style="display:flex;gap:.75rem;margin-top:1.25rem">
+        <button class="btn btn--primary" type="submit" id="createSubmitBtn">Create Quest</button>
+        <button class="btn btn--ghost" type="button" onclick="closeCreateModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>const PLAYER_ID = {{ player_id | default(1) }};</script>
 {% endblock %}
 {% block scripts %}<script src="{{ url_for('static', filename='js/quest_log.js') }}" defer></script>{% endblock %}

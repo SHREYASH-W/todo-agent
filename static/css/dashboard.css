@@ -1,32 +1,123 @@
-/* Dashboard styles – Requirements 22.1-22.7 */
-.dash { display: grid; gap: 1rem; grid-template-columns: 1fr 1fr; }
-.dash__header { grid-column: 1/-1; display: flex; justify-content: space-between; align-items: center; }
-.dash__xp     { grid-column: 1/-1; }
-.dash__vitals { grid-column: 1/-1; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+/* Dashboard – LifeHunter */
 
-.dash__identity { display: flex; gap: 1rem; align-items: center; }
-.dash__avatar   { font-size: 3rem; }
-.dash__name     { font-size: 1.5rem; font-weight: 700; }
-.dash__title-badge { color: var(--clr-gold); font-size: .85rem; }
-.dash__rank     { font-weight: 700; font-size: 1rem; margin-top: .2rem; }
-.dash__gold     { font-size: 1.2rem; font-weight: 700; color: var(--clr-gold); }
+.dash {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "header header"
+    "xp     xp"
+    "vitals vitals"
+    "stats  quests";
+}
 
-.dash__xp-label { display: flex; justify-content: space-between; margin-bottom: .4rem; font-size: .85rem; color: var(--clr-muted); }
-.dash__vital-text { font-size: .8rem; color: var(--clr-muted); margin-top: .3rem; }
+/* ── Header ─────────────────────────────────────────── */
+.dash__header {
+  grid-area: header;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 1rem;
+  background: linear-gradient(135deg, var(--surface) 0%, rgba(108,99,255,.12) 100%);
+  border-color: rgba(108,99,255,.3);
+}
+.dash__identity { display: flex; align-items: center; gap: 1rem; }
+.dash__avatar   { font-size: 3rem; line-height: 1; }
+.dash__name     { font-size: 1.6rem; font-weight: 800; letter-spacing: -.01em; }
+.dash__title-text { color: var(--gold); font-size: .85rem; min-height: 1.2em; }
+.dash__rank     { font-weight: 700; font-size: 1rem; margin-top: .15rem; }
 
-.dash__points-badge { font-size: .75rem; font-weight: normal; color: var(--clr-accent); margin-left: .5rem; }
-.dash__stat-alloc   { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--clr-border); }
-.dash__stat-btns    { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .5rem; }
+.dash__right    { text-align: right; display: flex; flex-direction: column; gap: .4rem; align-items: flex-end; }
+.dash__gold     { font-size: 1.25rem; font-weight: 700; color: var(--gold); white-space: nowrap; }
+.dash__level-badge {
+  background: rgba(108,99,255,.2);
+  border: 1px solid rgba(108,99,255,.4);
+  color: var(--primary-h);
+  padding: .25rem .75rem;
+  border-radius: 999px;
+  font-size: .9rem;
+  font-weight: 700;
+}
 
-.dash__quest-list   { list-style: none; }
-.dash__quest-item   { display: flex; align-items: center; gap: .75rem; padding: .6rem 0; border-bottom: 1px solid var(--clr-border); }
-.dash__quest-item:last-child { border-bottom: none; }
-.dash__quest-check  { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--clr-primary); cursor: pointer; flex-shrink: 0; }
-.dash__quest-check--done { background: var(--clr-primary); }
-.dash__quest-name   { flex: 1; font-size: .9rem; }
-.dash__quest-xp     { font-size: .8rem; color: var(--clr-accent); white-space: nowrap; }
+/* ── XP ─────────────────────────────────────────────── */
+.dash__xp { grid-area: xp; }
+.dash__xp-label {
+  display: flex; align-items: center; gap: 1rem;
+  margin-bottom: .5rem;
+  font-size: .88rem; font-weight: 600;
+}
+.dash__xp-label > span:first-child { margin-right: auto; }
 
-@media (max-width: 600px) {
-  .dash { grid-template-columns: 1fr; }
+/* ── Vitals ─────────────────────────────────────────── */
+.dash__vitals {
+  grid-area: vitals;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+}
+.vital-card { padding: .9rem 1.1rem; }
+.vital-card__header {
+  display: flex; justify-content: space-between;
+  margin-bottom: .4rem;
+  font-size: .85rem; font-weight: 600;
+  color: var(--muted);
+}
+.vital-card__header span:first-child { color: var(--text); }
+
+/* ── Stats ──────────────────────────────────────────── */
+.dash__stats { grid-area: stats; }
+.points-badge {
+  display: inline-flex; align-items: center; gap: .25rem;
+  background: rgba(0,212,255,.12);
+  border: 1px solid rgba(0,212,255,.25);
+  color: var(--accent);
+  padding: .2rem .65rem;
+  border-radius: 999px;
+  font-size: .78rem; font-weight: 700;
+}
+
+/* ── Quests ─────────────────────────────────────────── */
+.dash__quests { grid-area: quests; display: flex; flex-direction: column; }
+
+.pct-badge {
+  background: rgba(0,204,102,.12);
+  border: 1px solid rgba(0,204,102,.25);
+  color: var(--success);
+  padding: .18rem .6rem;
+  border-radius: 999px;
+  font-size: .78rem; font-weight: 700;
+}
+
+.quest-row {
+  display: flex; align-items: center; gap: .75rem;
+  padding: .65rem 0;
+  border-bottom: 1px solid rgba(42,42,80,.5);
+  transition: opacity .2s;
+}
+.quest-row:last-of-type { border-bottom: none; }
+.quest-row--done { opacity: .55; }
+
+.quest-row__check {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .75rem; font-weight: 800; color: #fff;
+  transition: background var(--transition), transform var(--transition);
+  user-select: none;
+}
+.quest-row__check:hover { background: rgba(108,99,255,.3); transform: scale(1.1); }
+.quest-row__check--done { background: var(--primary); border-color: var(--primary); }
+
+.quest-row__info { flex: 1; min-width: 0; }
+.quest-row__title { display: block; font-size: .9rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.quest-row__desc  { display: block; font-size: .78rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.quest-row__xp    { font-size: .82rem; color: var(--accent); font-weight: 700; white-space: nowrap; }
+
+/* ── Responsive ─────────────────────────────────────── */
+@media (max-width: 800px) {
+  .dash { grid-template-columns: 1fr; grid-template-areas: "header" "xp" "vitals" "stats" "quests"; }
+  .dash__vitals { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
   .dash__vitals { grid-template-columns: 1fr; }
+  .dash__name { font-size: 1.3rem; }
 }

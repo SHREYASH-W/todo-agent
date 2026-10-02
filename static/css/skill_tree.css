@@ -1,19 +1,79 @@
-/* Skill Tree styles – Requirements 24.1-24.7 */
-.skill-points-badge { font-size: .9rem; font-weight: normal; color: var(--clr-accent); margin-left: .75rem; }
-.skill-tree { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
-.skill-card { width: 160px; border: 1px solid var(--clr-border); border-radius: var(--radius); padding: 1rem; text-align: center; cursor: pointer; transition: border-color .2s, transform .15s; position: relative; }
-.skill-card:hover { border-color: var(--clr-primary); transform: translateY(-2px); }
-.skill-card--locked   { filter: grayscale(1) brightness(.6); }
-.skill-card--unlocked { border-color: var(--clr-primary); }
-.skill-card__icon  { font-size: 1.8rem; margin-bottom: .4rem; }
-.skill-card__name  { font-size: .85rem; font-weight: 600; }
-.skill-card__level { font-size: .75rem; color: var(--clr-muted); margin-top: .2rem; }
-.skill-card__type  { font-size: .65rem; text-transform: uppercase; color: var(--clr-accent); margin-top: .2rem; }
-.skill-card__btn   { margin-top: .6rem; }
+/* Skill Tree */
 
+.skill-pts-badge {
+  background: rgba(0,212,255,.12);
+  border: 1px solid rgba(0,212,255,.3);
+  color: var(--accent);
+  padding: .3rem .85rem;
+  border-radius: 999px;
+  font-size: .85rem;
+  font-weight: 700;
+}
+
+.skill-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: .85rem;
+}
+
+.skill-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  cursor: pointer;
+  position: relative;
+  transition: border-color var(--transition), transform var(--transition), background var(--transition);
+  display: flex; flex-direction: column; gap: .4rem;
+  outline: none;
+}
+.skill-card:hover, .skill-card:focus { border-color: var(--primary); transform: translateY(-2px); }
+.skill-card:focus { box-shadow: 0 0 0 2px rgba(108,99,255,.4); }
+
+.skill-card--locked {
+  opacity: .48;
+  filter: grayscale(.6);
+}
+.skill-card--locked:hover { opacity: .65; filter: grayscale(.4); }
+
+.skill-card--maxed { border-color: var(--gold); }
+.skill-card--maxed .skill-card__level { color: var(--gold); }
+
+.skill-card__top { display: flex; align-items: center; gap: .5rem; }
+.skill-card__icon { font-size: 1.6rem; line-height: 1; }
+.skill-card__type-badge {
+  font-size: .65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .04em;
+  padding: .1rem .4rem; border-radius: 4px;
+  margin-left: auto;
+}
+.skill-card__type-badge--active  { background: rgba(255,136,0,.2);  color: var(--warn); }
+.skill-card__type-badge--passive { background: rgba(0,212,255,.15); color: var(--accent); }
+
+.skill-card__name  { font-size: .88rem; font-weight: 700; line-height: 1.3; }
+.skill-card__level { font-size: .8rem; color: var(--muted); font-weight: 600; }
+
+.skill-card__bar { margin-top: .25rem; }
+
+.skill-card__alloc {
+  margin-top: .5rem;
+}
+
+.skill-card__lock-icon {
+  position: absolute; top: .6rem; right: .6rem;
+  font-size: .9rem; opacity: .6;
+}
+
+/* Tooltip */
 .skill-tooltip {
-  position: fixed; z-index: 200; background: var(--clr-surface);
-  border: 1px solid var(--clr-primary); border-radius: var(--radius);
-  padding: .75rem 1rem; max-width: 220px; font-size: .82rem;
-  box-shadow: 0 4px 16px rgba(0,0,0,.5); pointer-events: none;
+  position: fixed; z-index: 999;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: .75rem 1rem;
+  max-width: 260px;
+  font-size: .83rem;
+  box-shadow: var(--shadow);
+  pointer-events: none;
+  line-height: 1.5;
 }
