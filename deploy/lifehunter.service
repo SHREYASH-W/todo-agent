@@ -1,0 +1,30 @@
+[Unit]
+Description=LifeHunter Gamified Life Management System
+After=network.target
+
+[Service]
+Type=simple
+User=lifehunter
+WorkingDirectory=/opt/lifehunter
+ExecStart=/opt/lifehunter/.venv/bin/python -m gunicorn \
+    --workers 4 \
+    --bind 127.0.0.1:5000 \
+    --timeout 30 \
+    --access-logfile /opt/lifehunter/logs/access.log \
+    --error-logfile /opt/lifehunter/logs/error.log \
+    "src.app:create_app()"
+Restart=on-failure
+RestartSec=5s
+
+# Environment
+Environment=LH_LOG_LEVEL=INFO
+EnvironmentFile=-/opt/lifehunter/config/lifehunter.env
+
+# Security hardening
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/opt/lifehunter/logs /opt/lifehunter/backups /opt/lifehunter/config
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
