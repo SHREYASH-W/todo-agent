@@ -321,15 +321,16 @@ def test_register_duplicate_username(client):
 
 
 def test_register_invalid_email(client):
-    """POST /api/auth/register with invalid email returns 400 or 409."""
-    import time
-    unique = str(int(time.time() * 1000))[-6:]
+    """POST /api/auth/register with invalid email format is rejected (400 or 409)."""
+    import uuid
     payload = {
-        "username": f"valid_user_{unique}",
-        "email": "not-an-email",
+        "username": f"u_{uuid.uuid4().hex[:8]}",  # guaranteed unique username
+        "email": "not-an-email",  # invalid format
         "password": "SecurePassword123!",
     }
     resp = client.post("/api/auth/register", json=payload)
+    # 400 = email validation failed, 409 = email already exists in DB
+    # Both mean the registration was correctly rejected
     assert resp.status_code in (400, 409)
 
 
